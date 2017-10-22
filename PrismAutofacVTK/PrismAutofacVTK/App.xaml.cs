@@ -21,7 +21,7 @@ namespace PrismAutofacVTK
             base.OnStartup(e);
 
             var modelbuilder = new ContainerBuilder();
-            modelbuilder.RegisterType<Models.Model>().SingleInstance();
+            modelbuilder.RegisterInstance(Models.ModelBilder.Build()).SingleInstance();
             modelcontainer = modelbuilder.Build();
 
             var bootstrapper = new Bootstrapper();

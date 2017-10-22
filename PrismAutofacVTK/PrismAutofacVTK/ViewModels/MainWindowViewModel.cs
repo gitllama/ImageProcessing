@@ -28,13 +28,38 @@ namespace PrismAutofacVTK.ViewModels
 
             obj = new ReactiveProperty<object>((object)model);
 
+            float[] buf = new float[10000];
+            for (int y = 0; y < 100; y++)
+                for (int x = 0; x < 100; x++)
+                    buf[x + y * 100] = 100;
+            for (int y = 20; y < 80; y++)
+                for (int x = 20; x < 80; x++)
+                    buf[x + y * 100] = 120;
+            for (int y = 40; y < 80; y++)
+                for (int x = 40; x < 60; x++)
+                    buf[x + y * 100] = 100;
+
             LoadedCommand = new ReactiveCommand();
             LoadedCommand.Subscribe(_ =>
             {
                 Messenger.Instance.GetEvent<PubSubEvent<Action<Kitware.VTK.vtkRenderWindow>>>().Publish((render) =>
                 {
-                    model.Set();
-                    render.GetRenderers().GetFirstRenderer().AddActor(model.Data);
+
+                    model.Init();
+                    model.SetAxes();
+                    model.SetData(buf);
+
+                    model.CubeAxesActor.SetCamera(render.GetRenderers().GetFirstRenderer().GetActiveCamera());
+
+                    //render.GetRenderers().GetFirstRenderer().AddActor(model.Data);
+                    render.GetRenderers().GetFirstRenderer().AddActor(model.CubeAxesActor);
+                    render.GetRenderers().GetFirstRenderer().AddActor(model.DataActor);
+
+                    var camera = Kitware.VTK.vtkCamera.New();
+                    camera.Azimuth(180);
+                    //camera.SetViewUp(1, 1, 1);
+                    //camera.SetPosition(0, 0, 0);
+                    render.GetRenderers().GetFirstRenderer().SetActiveCamera(camera);
                 });
             });
 
@@ -45,6 +70,32 @@ namespace PrismAutofacVTK.ViewModels
                     render.Render();
                 });
             });
+            model.ObserveProperty(x => x.DataActor).Subscribe(_ =>
+            {
+                Messenger.Instance.GetEvent<PubSubEvent<Action<Kitware.VTK.vtkRenderWindow>>>().Publish((render) =>
+                {
+                    render.Render();
+                });
+            });
         }
     }
 }
+
+//using (var renderer = RenderControl.RenderWindow.GetRenderers().GetFirstRenderer())
+//{
+//    switch (com)
+//    {
+//        case "add":
+//            renderer.AddActor(actor);
+//            //RenderControl.RenderWindow.Render();
+//            break;
+//        case "remove":
+//            renderer.RemoveActor(actor);
+//            break;
+//        case "render":
+//            RenderControl.RenderWindow.Render();
+//            break;
+//        default:
+//            break;
+//    }
+//}
