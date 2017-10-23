@@ -1,3 +1,11 @@
-﻿"Width"  : 100
-"Height" : 100
-"Depth" : 200
+﻿"plane" : "Flat"
+
+#画素数
+
+"Width"  : 397
+"Height" : 650
+
+#Depth
+"Depth" : 1
+"Scale" : 100
+"ScalarRangeMax" : 1
