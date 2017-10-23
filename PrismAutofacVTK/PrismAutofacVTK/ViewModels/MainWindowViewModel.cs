@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Prism.Events;
 using Prism.Mvvm;
+using PrismAutofacVTK.Models;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -28,42 +29,44 @@ namespace PrismAutofacVTK.ViewModels
 
             obj = new ReactiveProperty<object>((object)model);
 
-            float[] buf = new float[10000];
-            for (int y = 0; y < 100; y++)
-                for (int x = 0; x < 100; x++)
-                    buf[x + y * 100] = 100;
-            for (int y = 20; y < 80; y++)
-                for (int x = 20; x < 80; x++)
-                    buf[x + y * 100] = 120;
-            for (int y = 40; y < 80; y++)
-                for (int x = 40; x < 60; x++)
-                    buf[x + y * 100] = 100;
 
             LoadedCommand = new ReactiveCommand();
             LoadedCommand.Subscribe(_ =>
             {
                 Messenger.Instance.GetEvent<PubSubEvent<Action<Kitware.VTK.vtkRenderWindow>>>().Publish((render) =>
                 {
+                    using (var _render = render.GetRenderers().GetFirstRenderer())
+                    {
+                        model.Init();
+                        _render.AddActor(model.AreaActor);
+                        render.Render();
 
-                    model.Init();
-                    model.SetAxes();
-                    model.SetData(buf);
+                        //model.SetData(buf);
+                        //model.ReadRawInt32("000.bin", (i) =>1 -  (float)(i / 100000.0));
+                        model.ReadRawPGM("test.pgm", (i) => 1-(float)(i / 255));
 
-                    model.CubeAxesActor.SetCamera(render.GetRenderers().GetFirstRenderer().GetActiveCamera());
+                        _render.AddActor(model.DataActor);
 
-                    //render.GetRenderers().GetFirstRenderer().AddActor(model.Data);
-                    render.GetRenderers().GetFirstRenderer().AddActor(model.CubeAxesActor);
-                    render.GetRenderers().GetFirstRenderer().AddActor(model.DataActor);
+                    }
 
-                    var camera = Kitware.VTK.vtkCamera.New();
-                    camera.Azimuth(180);
+                    //model.SetAxes();
+
+                    //model.CubeAxesActor.SetCamera(render.GetRenderers().GetFirstRenderer().GetActiveCamera());
+
+
+                    //render.GetRenderers().GetFirstRenderer().AddActor(model.CubeAxesActor);
+                    //render.GetRenderers().GetFirstRenderer().AddActor(model.DataActor);
+
+
+                    //var camera = Kitware.VTK.vtkCamera.New();
+                    //camera.Azimuth(180);
                     //camera.SetViewUp(1, 1, 1);
                     //camera.SetPosition(0, 0, 0);
-                    render.GetRenderers().GetFirstRenderer().SetActiveCamera(camera);
+                    //render.GetRenderers().GetFirstRenderer().SetActiveCamera(camera);
                 });
             });
 
-            model.ObserveProperty(x => x.Data).Subscribe(_=>
+            model.ObserveProperty(x => x.AreaActor).Subscribe(_=>
             {
                 Messenger.Instance.GetEvent<PubSubEvent<Action<Kitware.VTK.vtkRenderWindow>>>().Publish((render) =>
                 {
@@ -99,3 +102,6 @@ namespace PrismAutofacVTK.ViewModels
 //            break;
 //    }
 //}
+
+
+
