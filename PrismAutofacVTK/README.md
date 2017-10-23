@@ -93,6 +93,11 @@ cube=vtk.vtkCubeSource() # 立方体のSourceを生成
 cone.SetResolution(40) # 解像度の設定
 ```
 
+```C#
+var reader = new Kitware.VTK.vtkPLYReader();
+reader.SetFileName(@"bun_zipper.ply");
+```
+
 #### Mapper
 
 ```Python
