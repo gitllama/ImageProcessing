@@ -7,7 +7,8 @@ ReactiveProperty v 3.6.0
 
 ## VTK (Visualization Toolkit)
 
-https://github.com/Kitware/VTK
+https://github.com/Kitware/VTK  
+https://lorensen.github.io/VTKExamples/site/
 
 BSD 3-clause Licenseで使用できる3Dコンピュータグラフィックス・画像処理・可視化ライブラリ  
 幅広い言語サポートと、医用画像処理等に活用されている（ので汎用的に使用できそう）
