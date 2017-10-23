@@ -1,13 +1,18 @@
 # PrismAutofacVTK
 
-3D
-
 Activiz.NET.x86 v 5.8.0
 Extended.Wpf.Toolkit v3.2.0
 System.ValueTuple v 4.4.0
 ReactiveProperty v 3.6.0
 
-## VTK
+## VTK (Visualization Toolkit)
+
+https://github.com/Kitware/VTK
+
+BSD 3-clause Licenseで使用できる3Dコンピュータグラフィックス・画像処理・可視化ライブラリ  
+幅広い言語サポートと、医用画像処理等に活用されている（ので汎用的に使用できそう）
+
+### Setting
 
 1.ツール > NuGetパッケージマネージャー > パッケージの管理
 
@@ -58,14 +63,14 @@ public class Messenger : EventAggregator
 }
 public MainWindow()
 {
-	InitializeComponent();
+　InitializeComponent();
   Messenger.Instance.GetEvent<PubSubEvent<vtkActor>>().Subscribe(m =>{
     using (var renderer = RenderControl.RenderWindow.GetRenderers().GetFirstRenderer())
     {
       renderer.AddActor(actor);
       RenderControl.RenderWindow.Render();
     }
-  };
-	//VM : Messenger.Instance.GetEvent<PubSubEvent<vtkActor>>().Publish(actor);
+  };
+　//VM : Messenger.Instance.GetEvent<PubSubEvent<vtkActor>>().Publish(actor);
 }
 ```
