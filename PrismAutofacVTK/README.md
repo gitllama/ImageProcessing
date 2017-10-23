@@ -108,7 +108,7 @@ mapper.SetInput(cube.GetOutput()) # データを取得
 VTK6.0よりSetInputが  
 - SetInputData（vtkDataObject） : データの入力
 - SetInputConnection(vtkAlgorithmOutput) : 他のフィルタの出力の入力
-に置換している
+に置換している（らしいけどIntelliSense眺めてる感じ違ってそう。ActiViz最終Ver.2012年なので...）
 
 #### Actor
 
