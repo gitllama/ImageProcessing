@@ -19,7 +19,7 @@ BSD 3-clause Licenseで使用できる3Dコンピュータグラフィックス�
 
 ActiViz.NET x86 参照追加
 
-> x64もほぼ同じコードで動くが、vtkPoints.InsertNextPoint()がint -> longになることに注意
+> ActiViz.NET x64もほぼ同じコードで動くが、vtkPoints.InsertNextPoint()がint -> longになることに注意
 
 2.プロジェクト > 参照の追加
 
